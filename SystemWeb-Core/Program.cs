@@ -1,14 +1,14 @@
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSystemWebAdapters()
-    //.AddJsonSessionSerializer(options => ClassLibrary.SessionUtils.RegisterSessionKeys(options)) //Commented out because ClassLibrary doesn't exist
+    .AddJsonSessionSerializer(options => ClassLibrary.SessionUtils.RegisterSessionKeys(options.KnownKeys))
+    .WrapAspNetCoreSession()
     .AddRemoteAppClient(options =>
     {
         options.RemoteAppUrl = new(builder.Configuration["ReverseProxy:Clusters:fallbackCluster:Destinations:fallbackApp:Address"]);
         options.ApiKey = builder.Configuration["RemoteAppApiKey"];
     })
-    .AddAuthenticationClient(isDefaultScheme: true)
-    .AddSessionClient();
+    .AddAuthenticationClient(isDefaultScheme: true);
 
 builder.Services.AddReverseProxy().LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
