@@ -19,6 +19,7 @@ namespace SystemWeb_Framework
                 .AddProxySupport(options => options.UseForwardedHeaders = true)
                 //.AddJsonSessionSerializer(options => ClassLibrary.SessionUtils.RegisterSessionKeys(options.KnownKeys)) // Commented because ClassLibrary doesn't exist
                 .AddRemoteAppServer(options => options.ApiKey = ConfigurationManager.AppSettings["RemoteAppApiKey"])
+                .AddAuthenticationServer()
                 .AddSessionServer();
         }
     }
